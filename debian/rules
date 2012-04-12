@@ -6,16 +6,18 @@ DH_VERBOSE=0
 DEB_BUILD_HARDENING = 1
 export DEB_BUILD_HARDENING
 
-CFLAGS = `dpkg-buildflags --get CFLAGS`
-CFLAGS += -Wall
-CFLAGS += `dpkg-buildflags --get CPPFLAGS`
-LDFLAGS = `dpkg-buildflags --get LDFLAGS`
+CFLAGS = -Wall -g
+#CFLAGS = `dpkg-buildflags --get CFLAGS`
+#CFLAGS += -Wall
+#CFLAGS += `dpkg-buildflags --get CPPFLAGS`
+#LDFLAGS = `dpkg-buildflags --get LDFLAGS`
 
 FLAVOURS:=mysql odbc pgsql
 
 BUILDDIR_mysql = $(CURDIR)/debian/build-mysql
 BUILDDIR_pgsql = $(CURDIR)/debian/build-pgsql
 BUILDDIR_odbc = $(CURDIR)/debian/build-odbc
+BUILDDIR_libclient = $(CURDIR)/api/libsphinxclient
 BASEDIR = $(CURDIR)
 
 DEB_BUILD_ARCH ?=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
@@ -105,6 +107,12 @@ config.status.odbc: config.env.odbc config.sub config.guess
 	    $(CONFIGURE_OPTS) >$@
 	touch $@
 
+config.status.libclient:
+	cd $(BUILDDIR_libclient) && CFLAGS="$(CFLAGS)" CORE_LINK="$(LDFLAGS)" ./configure  \
+            --prefix=/usr \
+            $(CONFIGURE_OPTS) >$@
+	touch $@
+
 config.status.%:
 	echo "configuration for flavour $* not yet defined."
 
@@ -119,7 +127,12 @@ build-arch: $(foreach flavour,$(FLAVOURS),build-arch.$(flavour))
 
 build-indep:
 
-build: build-indep build-arch
+build-libclient: config.status.libclient
+	dh_testdir
+	dh_prep
+	$(MAKE) -j$(NUMJOBS) -C $(BUILDDIR_libclient)
+
+build: build-libclient build-indep build-arch
 	dh_testdir
 	touch $@
 
