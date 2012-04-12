@@ -1,0 +1,2 @@
+api/libsphinxclient/sphinxclient.h /usr/include/
+api/libsphinxclient/.libs/*.a /usr/lib/
