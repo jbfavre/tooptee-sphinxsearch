@@ -1,0 +1,172 @@
+#!/usr/bin/make -f
+
+DH_VERBOSE=0
+
+# enable the hardening wrapper
+DEB_BUILD_HARDENING = 1
+export DEB_BUILD_HARDENING
+
+CFLAGS = `dpkg-buildflags --get CFLAGS`
+CFLAGS += -Wall
+CFLAGS += `dpkg-buildflags --get CPPFLAGS`
+LDFLAGS = `dpkg-buildflags --get LDFLAGS`
+
+FLAVOURS:=mysql odbc pgsql
+
+BUILDDIR_mysql = $(CURDIR)/debian/build-mysql
+BUILDDIR_pgsql = $(CURDIR)/debian/build-pgsql
+BUILDDIR_odbc = $(CURDIR)/debian/build-odbc
+BASEDIR = $(CURDIR)
+
+DEB_BUILD_ARCH ?=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
+ifeq ($(DEB_BUILD_ARCH),sparc)
+	CONFIGURE_OPTS = --with-cc-opt="-m32 -mcpu=ultrasparc"
+endif
+
+
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+	NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+	ifeq (${NUMJOBS}, 0)
+		NUMJOBS = 1
+	endif
+else
+	NUMJOBS = 1
+endif
+
+config.sub:
+	dh_testdir
+ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+		cp -f /usr/share/misc/config.sub config.sub
+endif
+
+config.guess:
+	dh_testdir
+ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+		cp -f /usr/share/misc/config.guess config.guess
+endif
+
+config.env.%:
+	dh_testdir
+	mkdir -p $(BUILDDIR_$*)
+	cp -Pa $(CURDIR)/api $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/config $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/contrib $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/doc $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/libstemmer_c $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/src $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/test $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/Makefile.in $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/configure $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/sphinx.conf.in $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/sphinx-min.conf.in $(BUILDDIR_$*)/
+	cp -Pa $(CURDIR)/example.sql $(BUILDDIR_$*)/
+
+config.status.mysql: config.env.mysql config.sub config.guess
+	cd $(BUILDDIR_mysql) && CFLAGS="$(CFLAGS)" CORE_LINK="$(LDFLAGS)" ./configure  \
+	    --prefix=/usr \
+	    --mandir=\$${prefix}/share/man \
+	    --infodir=\$${prefix}/share/info \
+	    --localstatedir=/var/lib/sphinxsearch \
+	    --sysconfdir=/etc/sphinxsearch \
+	    --enable-id64 \
+	    --with-iconv \
+	    --with-syslog \
+	    --with-mysql \
+	    $(CONFIGURE_OPTS) >$@
+	touch $@
+
+config.status.pgsql: config.env.pgsql config.sub config.guess
+	cd $(BUILDDIR_pgsql) && CFLAGS="$(CFLAGS)" CORE_LINK="$(LDFLAGS)" ./configure  \
+	    --prefix=/usr \
+	    --mandir=\$${prefix}/share/man \
+	    --infodir=\$${prefix}/share/info \
+	    --localstatedir=/var/lib/sphinxsearch \
+	    --sysconfdir=/etc/sphinxsearch \
+	    --enable-id64 \
+	    --with-iconv \
+	    --with-syslog \
+            --without-mysql \
+	    --with-pgsql \
+	    $(CONFIGURE_OPTS) >$@
+	touch $@
+
+config.status.odbc: config.env.odbc config.sub config.guess
+	cd $(BUILDDIR_odbc) && CFLAGS="$(CFLAGS)" CORE_LINK="$(LDFLAGS)" ./configure  \
+	    --prefix=/usr \
+	    --mandir=\$${prefix}/share/man \
+	    --infodir=\$${prefix}/share/info \
+	    --localstatedir=/var/lib/sphinxsearch \
+	    --sysconfdir=/etc/sphinxsearch \
+	    --enable-id64 \
+	    --with-iconv \
+	    --with-syslog \
+            --without-mysql \
+	    --with-unixodbc \
+	    $(CONFIGURE_OPTS) >$@
+	touch $@
+
+config.status.%:
+	echo "configuration for flavour $* not yet defined."
+
+build-arch.%: config.status.%
+	dh_testdir
+	dh_prep
+	$(MAKE) -j$(NUMJOBS) -C $(BUILDDIR_$*)
+
+build-arch: $(foreach flavour,$(FLAVOURS),build-arch.$(flavour))
+	dh_testdir
+	touch $@
+
+build-indep:
+
+build: build-indep build-arch
+	dh_testdir
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	rm -f config.sub config.guess
+	dh_clean
+	rm -rf $(CURDIR)/debian/build-*
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	dh_install
+
+binary-indep: install
+	dh_testdir
+	dh_testroot
+	dh_installman -i
+	dh_installdocs -i
+	dh_installexamples -i
+	dh_installinit -r --no-start -i --init-script=sphinxsearch
+	dh_link -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+binary-arch: install
+	dh_testdir
+	dh_testroot
+	dh_installdocs -a
+	dh_link -aA
+	dh_compress -a
+	dh_perl -a
+	dh_fixperms -a
+	dh_installdeb -a
+	dh_shlibdeps -a
+	dh_gencontrol -a
+	dh_md5sums -a
+	dh_builddeb -a
+
+binary: binary-indep binary-arch
+
+.PHONY: build clean binary-indep binary-arch binary install

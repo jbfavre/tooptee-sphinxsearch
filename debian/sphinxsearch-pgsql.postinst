@@ -1,0 +1,40 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+  configure|abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+  *)
+    echo "postinst called with unknown argument \`$1'" >&2
+    exit 1
+    ;;
+esac
+
+if [ -x /etc/init.d/sphinxsearch ]; then
+  if [ -f /var/run/sphinxsearch.pid ] && pidof /usr/bin/searchd >/dev/null; then
+    echo "Trying a soft restart"
+    SPHX_PID=`cat /var/run/sphinxsearch.pid`
+    if kill -s USR2 $SPHX_PID 2>/dev/null; then
+      echo "PID IS RIGHT"
+      while [ ! -f /var/run/sphinxsearch.pid.oldbin ]; do
+        echo "WAITING"
+        cnt=`expr $cnt + 1`
+        if [ $cnt -gt 10 ]; then
+          echo "Sphinxsearch 'soft' update failed, doing restart"
+          kill -s KILL $SPHX_PID
+          invoke-rc.d sphinxsearch start
+          exit 0
+        fi
+        sleep 1
+      done
+      echo "QUIT"
+      SPHX_OLD_PID=`cat /var/run/sphinxsearch.pid.oldbin`
+      kill -s QUIT $SPHX_OLD_PID
+    fi
+  fi
+fi
+
+#DEBHELPER#
+
+exit 0

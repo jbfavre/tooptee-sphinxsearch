@@ -1,0 +1,117 @@
+Source: sphinxsearch
+Section: misc
+Priority: optional
+Maintainer: Jean Baptiste Favre <debian@jbfavre.org>
+Build-Depends: autotools-dev,
+               debhelper (>= 7),
+               hardening-wrapper,
+               dpkg-dev (>= 1.15.7),
+               libtool,
+               libmysqlclient-dev,
+               libpq-dev,
+               unixodbc-dev,
+               libticonv-dev
+Standards-Version: 3.9.3
+Homepage: http://sphinxsearch.com
+
+Package: sphinxsearch
+Architecture: all
+Depends: sphinxsearch-mysql | sphinxsearch-pgsql | sphinxsearch-odbc,
+         ${misc:Depends}
+Description: Fast standalone full-text SQL search engine
+ Sphinx is a standalone full text search engine, meant to provide fast,
+ size-efficient and relevant fulltext search functions to other applications. 
+ Sphinx was specially designed to integrate well with SQL databases and 
+ scripting languages.
+ .
+ Sphinx is an acronym which is officially decoded as SQL Phrase Index. 
+ .
+ This is a dummy package that selects sphinxsearch-mysql by default.
+
+Package: sphinxsearch-doc
+Architecture: all
+Section: doc
+Depends: lsb-base (>= 3.2-14),
+         ${misc:Depends}
+Description: Fast standalone full-text SQL search engine
+ Sphinx is a standalone full text search engine, meant to provide fast,
+ size-efficient and relevant fulltext search functions to other applications. 
+ Sphinx was specially designed to integrate well with SQL databases and 
+ scripting languages.
+ .
+ This package provides extra documentation to help unleash the power of Sphinx.
+
+Package: sphinxsearch-common
+Architecture: all
+Depends: lsb-base (>= 3.2-14),
+         ${misc:Depends}
+Description: Fast standalone full-text SQL search engine
+ Sphinx is a standalone full text search engine, meant to provide fast,
+ size-efficient and relevant fulltext search functions to other applications. 
+ Sphinx was specially designed to integrate well with SQL databases and 
+ scripting languages.
+ .
+ This package contains base configuration files used across multiple packaged
+ versions of Sphinx (sphinxsearch-mysql, sphinxsearch-pgsql, sphinxsearch-odbc).
+
+Package: sphinxsearch-mysql
+Architecture: any
+Depends: sphinxsearch-common (= ${source:Version}),
+         ${misc:Depends},
+         ${shlibs:Depends}
+Provides: sphinxsearch
+Conflicts: sphinxsearch-pgsql,
+           sphinxsearch-odbc
+Description: Fast standalone full-text SQL search engine
+ Sphinx is a standalone full text search engine, meant to provide fast,
+ size-efficient and relevant fulltext search functions to other applications.
+ Sphinx was specially designed to integrate well with SQL databases and
+ scripting languages.
+ .
+ This package provides MySQL support.
+
+Package: sphinxsearch-pgsql
+Architecture: any
+Depends: sphinxsearch-common (= ${source:Version}),
+         libpq5,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Provides: sphinxsearch
+Conflicts: sphinxsearch-mysql,
+           sphinxsearch-odbc
+Description: Fast standalone full-text SQL search engine
+ Sphinx is a standalone full text search engine, meant to provide fast,
+ size-efficient and relevant fulltext search functions to other applications. 
+ Sphinx was specially designed to integrate well with SQL databases and 
+ scripting languages. This flavour provides PostgreSQL support.
+ .
+ This package provides PostgreSQL support.
+
+Package: sphinxsearch-odbc
+Architecture: any
+Depends: sphinxsearch-common (= ${source:Version}),
+         unixodbc,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Provides: sphinxsearch
+Conflicts: sphinxsearch-pgsql,
+           sphinxsearch-mysql
+Description: Fast standalone full-text SQL search engine
+ Sphinx is a standalone full text search engine, meant to provide fast,
+ size-efficient and relevant fulltext search functions to other applications. 
+ Sphinx was specially designed to integrate well with SQL databases and 
+ scripting languages. This flavour provides Unix ODBC support.
+ .
+ This package provides Unix ODBC support.
+
+#Package: libsphinxclient
+#Architecture: any
+#Depends: ${misc:Depends},
+#         ${shlibs:Depends}
+#Description: Fast standalone full-text SQL search engine
+# Sphinx is a standalone full text search engine, meant to provide fast,
+# size-efficient and relevant fulltext search functions to other applications. 
+# Sphinx was specially designed to integrate well with SQL databases and 
+# scripting languages.
+# .
+# This package provides C version of the Sphinx client API.

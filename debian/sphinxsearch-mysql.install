@@ -1,0 +1,5 @@
+debian/build-mysql/src/indexer usr/bin
+debian/build-mysql/src/indextool usr/bin
+debian/build-mysql/src/search usr/bin
+debian/build-mysql/src/searchd usr/bin
+debian/build-mysql/src/spelldump usr/bin
