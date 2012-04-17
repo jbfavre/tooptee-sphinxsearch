@@ -45,6 +45,7 @@ Description: Fast standalone full-text SQL search engine
 Package: sphinxsearch-common
 Architecture: all
 Depends: lsb-base (>= 3.2-14),
+         adduser,
          ${misc:Depends}
 Description: Fast standalone full-text SQL search engine
  Sphinx is a standalone full text search engine, meant to provide fast,
@@ -105,7 +106,7 @@ Description: Fast standalone full-text SQL search engine
  .
  This package provides Unix ODBC support.
 
-Package: libsphinxclient
+Package: libsphinxsearchclient
 Architecture: any
 Section: libs
 Depends: ${misc:Depends},
@@ -118,7 +119,7 @@ Description: Fast standalone full-text SQL search engine
  .
  This package provides C version of the Sphinx client API.
 
-Package: libsphinxclient-dev
+Package: libsphinxsearchclient-dev
 Architecture: any
 Section: libdevel
 Depends: ${misc:Depends},
