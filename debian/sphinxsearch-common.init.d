@@ -19,7 +19,7 @@
 #
 ### BEGIN INIT INFO
 # Provides:          sphinx
-# Required-Start:    $network $local_fs
+# Required-Start:    $network $local_fs $remote_fs
 # Required-Stop:     
 # Should-Start:      $named
 # Should-Stop:       
