@@ -1,0 +1,5 @@
+sphinxsearch-odbc binary: binary-without-manpage usr/bin/indexer
+sphinxsearch-odbc binary: binary-without-manpage usr/bin/indextool
+sphinxsearch-odbc binary: binary-without-manpage usr/bin/search
+sphinxsearch-odbc binary: binary-without-manpage usr/bin/searchd
+sphinxsearch-odbc binary: binary-without-manpage usr/bin/spelldump
