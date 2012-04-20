@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-DH_VERBOSE=0
+#export DH_VERBOSE=0
 
 # enable the hardening wrapper
 DEB_BUILD_HARDENING = 1
@@ -154,7 +154,9 @@ install: build
 binary-indep: install
 	dh_testdir
 	dh_testroot
+	dh_installdirs
 	dh_installman -i
+	dh_installlogrotate -i
 	dh_installdocs -i
 	dh_installexamples -i
 	dh_installinit -r --no-start -i --init-script=sphinxsearch
