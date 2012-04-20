@@ -1,4 +1,4 @@
-etc/sphinxsearch
-var/lib/sphinxsearch/
-var/lib/sphinxsearch/data/
-var/log/sphinxsearch/
+/etc/sphinxsearch
+/var/lib/sphinxsearch/
+/var/lib/sphinxsearch/data/
+/var/log/sphinxsearch/
