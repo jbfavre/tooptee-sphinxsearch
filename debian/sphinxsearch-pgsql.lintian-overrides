@@ -1,0 +1,5 @@
+sphinxsearch-pgsql binary: binary-without-manpage usr/bin/indexer
+sphinxsearch-pgsql binary: binary-without-manpage usr/bin/indextool
+sphinxsearch-pgsql binary: binary-without-manpage usr/bin/search
+sphinxsearch-pgsql binary: binary-without-manpage usr/bin/searchd
+sphinxsearch-pgsql binary: binary-without-manpage usr/bin/spelldump

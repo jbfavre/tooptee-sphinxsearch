@@ -160,7 +160,10 @@ binary-indep: install
 	dh_installdocs -i
 	dh_installexamples -i
 	dh_installinit -r --no-start -i --init-script=sphinxsearch
-	dh_link -i
+	dh_strip -a
+	dh_link -a
+	dh_lintian
+	#dh_link -i
 	dh_compress -i
 	dh_fixperms -i
 	dh_installdeb -i

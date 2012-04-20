@@ -1,0 +1,5 @@
+sphinxsearch-mysql binary: binary-without-manpage usr/bin/indexer
+sphinxsearch-mysql binary: binary-without-manpage usr/bin/indextool
+sphinxsearch-mysql binary: binary-without-manpage usr/bin/search
+sphinxsearch-mysql binary: binary-without-manpage usr/bin/searchd
+sphinxsearch-mysql binary: binary-without-manpage usr/bin/spelldump
