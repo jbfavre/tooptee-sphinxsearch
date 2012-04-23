@@ -1,12 +1,10 @@
-# Defaults for sphinx initscript
-# sourced by /etc/init.d/sphinx
-# installed at /etc/default/sphinx by the maintainer scripts
+#
+# Settings for the sphinxsearch searchd daemon
+# Please read /usr/share/doc/sphinxsearch/README.Debian for details.
+#
 
-# change this to RUN=1 when daemon is configured
-RUN=0
+# Should sphinxsearch run automatically on startup? (default: no)
+# Before doing this you might want to modify /etc/sphinxsearch/sphinx.conf
+# so that it works for you.
+START=no
 
-# system user under which daemon run
-DAEMONUSER=sphinx
-
-# Additional options that are passed to the Daemon.
-DAEMON_OPTS=""

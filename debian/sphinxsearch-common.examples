@@ -1,0 +1,2 @@
+debian/build-mysql/sphinx.conf.dist
+debian/build-mysql/sphinx-min.conf.dist
