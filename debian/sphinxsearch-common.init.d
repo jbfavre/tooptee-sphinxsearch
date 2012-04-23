@@ -106,7 +106,7 @@ do_start() {
         if [ ! -f /etc/sphinxsearch/sphinx.conf ]; then
             echo "\n"
             echo "Please create an /etc/sphinxsearch/sphinx.conf configuration file."
-            echo "A template is provided as /etc/sphinxsearch/sphinx.conf.sample."
+            echo "An extensive gzipped template is provided as /usr/share/doc/sphinxsearch-common/examples/sphinx.conf.dist.gz."
             exit 1
         fi
 
