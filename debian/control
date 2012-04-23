@@ -1,4 +1,4 @@
-Source: sphinxsearch
+Source: sphinx
 Section: misc
 Priority: optional
 Maintainer: Jean Baptiste Favre <debian@jbfavre.org>
