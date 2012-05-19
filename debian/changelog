@@ -1,6 +1,6 @@
-sphinxsearch (2.0.4-1~tooptee1) UNRELEASED; urgency=low
+sphinxsearch (2.0.4-1~tooptee10+1) lucid; urgency=low
 
   * New upstream version (2.0.4)
-  * Multi packages build
+  * dotBuntu build for Ubuntu 10.04 Lucid
 
- -- Jean Baptiste Favre <debian@jbfavre.org>  Wed, 11 Apr 2012 21:46:11 +0200
+ -- Jean Baptiste Favre <jbfavre@dotbuntu.org>  Wed, 11 Apr 2012 21:46:11 +0200
