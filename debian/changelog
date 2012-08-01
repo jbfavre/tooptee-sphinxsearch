@@ -1,6 +1,11 @@
+sphinxsearch (2.0.5-1~tooptee10+1) lucid; urgency=low
+
+  * New upstream release 2.0.5
+
+ -- Jean Baptiste Favre <jbfavre@dotbuntu.org>  Wed, 01 Aug 2012 23:10:57 +0200
+
 sphinxsearch (2.0.4-1~tooptee10+1) lucid; urgency=low
 
-  * New upstream version (2.0.4)
   * dotBuntu build for Ubuntu 10.04 Lucid
 
- -- Jean Baptiste Favre <jbfavre@dotbuntu.org>  Wed, 11 Apr 2012 21:46:11 +0200
+ -- Jean Baptiste Favre <jbfavre@dotbuntu.org>  Sun, 13 May 2012 12:35:06 +0200
